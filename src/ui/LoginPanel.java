@@ -1,3 +1,4 @@
+
 package ui;
 
 import model.UserDAO;
@@ -14,24 +15,64 @@ public class LoginPanel extends JFrame {
         userDAO = new UserDAO();
 
         setTitle("Login - Student Management System");
-        setSize(400, 200);
+        setSize(450, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(3, 2, 10, 10));
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        add(new JLabel("Username:"));
+        JPanel background = new JPanel();
+        background.setBackground(new Color(34, 45, 65));
+        background.setLayout(new GridBagLayout());
+        add(background);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 20, 10, 20);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblTitle = new JLabel("Student Management System", JLabel.CENTER);
+        lblTitle.setForeground(Color.WHITE);
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        background.add(lblTitle, gbc);
+
+        JLabel lblUsername = new JLabel("Username:");
+        lblUsername.setForeground(Color.WHITE);
+        lblUsername.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridy = 1; gbc.gridwidth = 1;
+        background.add(lblUsername, gbc);
+
         txtUsername = new JTextField();
-        add(txtUsername);
+        txtUsername.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtUsername.setBorder(new RoundedBorder(10));
+        gbc.gridx = 1;
+        background.add(txtUsername, gbc);
 
-        add(new JLabel("Password:"));
+        JLabel lblPassword = new JLabel("Password:");
+        lblPassword.setForeground(Color.WHITE);
+        lblPassword.setFont(new Font("Arial", Font.PLAIN, 14));
+        gbc.gridx = 0; gbc.gridy = 2;
+        background.add(lblPassword, gbc);
+
         txtPassword = new JPasswordField();
-        add(txtPassword);
+        txtPassword.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtPassword.setBorder(new RoundedBorder(10));
+        gbc.gridx = 1;
+        background.add(txtPassword, gbc);
 
         btnLogin = new JButton("Login");
-        add(new JLabel()); // empty cell
-        add(btnLogin);
+        btnLogin.setBackground(new Color(75, 135, 185));
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setFocusPainted(false);
+        btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
+        btnLogin.setBorder(new RoundedBorder(10));
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        background.add(btnLogin, gbc);
 
         btnLogin.addActionListener(e -> login());
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) { btnLogin.setBackground(new Color(100, 160, 210)); }
+            public void mouseExited(java.awt.event.MouseEvent evt) { btnLogin.setBackground(new Color(75, 135, 185)); }
+        });
     }
 
     private void login() {
@@ -45,14 +86,10 @@ public class LoginPanel extends JFrame {
 
         if (userDAO.validateUser(username, password)) {
             JOptionPane.showMessageDialog(this, "Login successful!");
-            // Open main student management GUI
-            SwingUtilities.invokeLater(() -> {
-                new StudentManagementSystemGUI().setVisible(true);
-            });
-            dispose(); // close login window
+            SwingUtilities.invokeLater(() -> new StudentManagementSystemGUI().setVisible(true));
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.");
         }
     }
 }
-
